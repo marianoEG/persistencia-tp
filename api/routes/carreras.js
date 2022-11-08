@@ -12,6 +12,23 @@ router.get("/", (req, res) => {
     .catch(() => res.sendStatus(500));
 });
 
+// MATERIAS DE LA CARRERA
+router.get("/materias", (req, res) => {
+  models.carrera
+    .findAll({
+      include: [
+        {
+          model: models.materia,
+          as: "materias-de-carrera",
+          attributes: ["nombre"],
+        },
+      ],
+      attributes: ["id", "nombre"],
+    })
+    .then((carreras) => res.send(carreras))
+    .catch(() => res.sendStatus(500));
+});
+
 router.post("/", (req, res) => {
   models.carrera
     .create({ nombre: req.body.nombre })
