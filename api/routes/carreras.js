@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
     .catch(() => res.sendStatus(500));
 });
 
-// MATERIAS DE LA CARRERA
+// CARRERAS CON MATERIAS
 router.get("/materias", (req, res) => {
   models.carrera
     .findAll({
@@ -50,6 +50,13 @@ const findCarrera = (id, { onSuccess, onNotFound, onError }) => {
     .findOne({
       attributes: ["id", "nombre"],
       where: { id },
+      include: [
+        {
+          model: models.materia,
+          as: "materias-de-carrera",
+          attributes: ["nombre"],
+        },
+      ],
     })
     .then((carrera) => (carrera ? onSuccess(carrera) : onNotFound()))
     .catch(() => onError());

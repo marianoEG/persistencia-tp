@@ -6,7 +6,7 @@ router.get("/", (req, res) => {
   console.log("Esto es un mensaje para ver en consola");
   models.materia
     .findAll({
-      attributes: ["id", "nombre", "id_carrera"],
+      attributes: ["id", "nombre", "id_carrera", "id_profesor"],
     })
     .then((materias) => res.send(materias))
     .catch(() => res.sendStatus(500));
@@ -31,8 +31,15 @@ router.post("/", (req, res) => {
 const findMateria = (id, { onSuccess, onNotFound, onError }) => {
   models.materia
     .findOne({
-      attributes: ["id", "nombre", "id_carrera"],
+      attributes: ["id", "nombre", "id_carrera", "id_profesor"],
       where: { id },
+      include: [
+        {
+          model: models.inscripciones,
+          as: "inscripciones",
+          attributes: ["id_alumno"],
+        },
+      ],
     })
     .then((materia) => (materia ? onSuccess(materia) : onNotFound()))
     .catch(() => onError());
@@ -50,8 +57,12 @@ router.put("/:id", (req, res) => {
   const onSuccess = (materia) =>
     materia
       .update(
-        { nombre: req.body.nombre, id_carrera: req.body.id_carrera },
-        { fields: ["nombre", "id_carrera"] }
+        {
+          nombre: req.body.nombre,
+          id_carrera: req.body.id_carrera,
+          id_profesor: req.body.id_profesor,
+        },
+        { fields: ["nombre", "id_carrera", "id_profesor"] }
       )
       .then(() => res.sendStatus(200))
       .catch((error) => {

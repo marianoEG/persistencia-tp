@@ -12,6 +12,24 @@ router.get("/", (req, res) => {
     .catch(() => res.sendStatus(500));
 });
 
+// ALUMNOS CON INSCRIPCIONES
+router.get("/inscripciones", (req, res) => {
+  console.log("Esto es un mensaje para ver en consola");
+  models.alumno
+    .findAll({
+      attributes: ["id", "nombre", "dni"],
+      include: [
+        {
+          model: models.inscripciones,
+          as: "inscripciones-de-alumno",
+          attributes: ["fecha", "id_materia"],
+        },
+      ],
+    })
+    .then((alumnos) => res.send(alumnos))
+    .catch(() => res.sendStatus(500));
+});
+
 router.post("/", (req, res) => {
   models.alumno
     .create({ nombre: req.body.nombre, dni: req.body.dni })
@@ -33,6 +51,13 @@ const findAlumno = (id, { onSuccess, onNotFound, onError }) => {
     .findOne({
       attributes: ["id", "nombre", "dni"],
       where: { id },
+      include: [
+        {
+          model: models.inscripciones,
+          as: "inscripciones-de-alumno",
+          attributes: ["fecha", "id_materia"],
+        },
+      ],
     })
     .then((alumno) => (alumno ? onSuccess(alumno) : onNotFound()))
     .catch(() => onError());

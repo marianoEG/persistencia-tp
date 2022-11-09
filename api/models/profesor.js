@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   profesor.associate = function (models) {
     profesor.hasMany(models.materia, {
-      as: "materia",
+      as: "materias-de-profesor",
       foreignKey: "id_profesor",
     });
     // associations can be defined here

@@ -12,6 +12,24 @@ router.get("/", (req, res) => {
     .catch(() => res.sendStatus(500));
 });
 
+// PROFESORES CON MATERIAS
+router.get("/materias", (req, res) => {
+  console.log("Esto es un mensaje para ver en consola");
+  models.profesor
+    .findAll({
+      attributes: ["id", "nombre", "dni"],
+      include: [
+        {
+          model: models.materia,
+          as: "materias-de-profesor",
+          attributes: ["nombre"],
+        },
+      ],
+    })
+    .then((profesor) => res.send(profesor))
+    .catch(() => res.sendStatus(500));
+});
+
 router.post("/", (req, res) => {
   models.profesor
     .create({ nombre: req.body.nombre, dni: req.body.dni })
@@ -33,6 +51,13 @@ const findProfesor = (id, { onSuccess, onNotFound, onError }) => {
     .findOne({
       attributes: ["id", "nombre", "dni"],
       where: { id },
+      include: [
+        {
+          model: models.materia,
+          as: "materias-de-profesor",
+          attributes: ["nombre"],
+        },
+      ],
     })
     .then((profesor) => (profesor ? onSuccess(profesor) : onNotFound()))
     .catch(() => onError());

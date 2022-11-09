@@ -4,6 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     "inscripciones",
     {
       fecha: DataTypes.STRING,
+      id_materia: DataTypes.INTEGER,
+      id_alumno: DataTypes.INTEGER,
     },
     {}
   );

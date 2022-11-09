@@ -7,6 +7,7 @@ var carrerasRouter = require("./routes/carreras");
 var materiasRouter = require("./routes/materias"); //Agregado materias
 var alumnosRouter = require("./routes/alumnos"); //Agregado alumnos
 var profesoresRouter = require("./routes/profesores"); //Agregado profesores
+var inscripcionesRouter = require("./routes/inscripciones"); //Agregado inscripciones
 
 var app = express();
 
@@ -22,8 +23,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/car", carrerasRouter);
 app.use("/mat", materiasRouter); //Agregado materias
-app.use("/alu", alumnosRouter);
-app.use("/prof", profesoresRouter);
+app.use("/alu", alumnosRouter); //Agregado alumnos
+app.use("/prof", profesoresRouter); //Agregado profesores
+app.use("/ins", inscripcionesRouter); //Agregado inscripciones
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
