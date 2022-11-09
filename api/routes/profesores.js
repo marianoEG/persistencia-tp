@@ -3,10 +3,17 @@ var router = express.Router();
 var models = require("../models");
 
 router.get("/", (req, res) => {
+  //PAGINACION
+  //FORMATO localhost:3001/prof?pagina=__&cantidad=__
+  const pagina = Number.parseInt(req.query.pagina);
+  const cantidad = Number.parseInt(req.query.cantidad);
+
   console.log("Esto es un mensaje para ver en consola");
   models.profesor
     .findAll({
       attributes: ["id", "nombre", "dni"],
+      limit: cantidad,
+      offset: pagina * cantidad,
     })
     .then((profesor) => res.send(profesor))
     .catch(() => res.sendStatus(500));

@@ -3,10 +3,17 @@ var router = express.Router();
 var models = require("../models");
 
 router.get("/", (req, res) => {
+  //PAGINACION
+  //FORMATO localhost:3001/ins?pagina=__&cantidad=__
+  const pagina = Number.parseInt(req.query.pagina);
+  const cantidad = Number.parseInt(req.query.cantidad);
+
   console.log("Esto es un mensaje para ver en consola");
   models.inscripciones
     .findAll({
       attributes: ["id", "fecha", "id_alumno", "id_materia"],
+      limit: cantidad,
+      offset: pagina * cantidad,
     })
     .then((inscripciones) => res.send(inscripciones))
     .catch(() => res.sendStatus(500));
