@@ -8,7 +8,7 @@ router.get("/", (req, res) => {
   const pagina = Number.parseInt(req.query.pagina);
   const cantidad = Number.parseInt(req.query.cantidad);
 
-  console.log("Esto es un mensaje para ver en consola");
+  console.log("Pagina número " + pagina + ", Cantidad de inscripciones por página " +  cantidad);
   models.inscripciones
     .findAll({
       attributes: ["id", "fecha", "id_alumno", "id_materia"],
