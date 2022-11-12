@@ -11,22 +11,25 @@ var inscripcionesRouter = require("./routes/inscripciones"); //Agregado inscripc
 
 var app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 //Login con JWT
+
 
 const jwt = require('jsonwebtoken');
 
 const keys = require('./settings/keys');
-const { decode } = require("punycode");
 
 app.set('key', keys.key);
-app.use(express.urlencoded({extended:false}));
-app.use(express.json());
 
 app.get('/', (req,res)=>{
   res.send('HOLA MUNDO')
 })
 
-app.post('/login', (req,res)=>{
+
+
+app.post('/login',(req,res)=>{
   if(req.body.usuario == 'admin' && req.body.pass == '12345'){
     const payload = {
       check:true
@@ -45,10 +48,12 @@ app.post('/login', (req,res)=>{
   }
 });
 
+
 const verificacion = express.Router();
 
 verificacion.use((req, res, next)=>{
-  let token = req.headers['x-access-token'] || req.headers['authorization'];
+  
+  let token = req.headers['access-token'] || req.headers['authorization'];
   //console.log(token);
   if(!token){
     res.status(401).send({
@@ -75,30 +80,31 @@ verificacion.use((req, res, next)=>{
 
 });
 
+//Fin login
+
+//Ejemplo con get/info inicial
 app.get('/info', verificacion, (req,res)=>{
   res.json('INFORMACIÓN IMPORTANTE ENTREGADA');
 })
 
-
-//app.listen(3001, ()=>{
-//  console.log('Servidor UP en http://localhost:3000');
-// })
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+
+
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/car", carrerasRouter);
-app.use("/mat", materiasRouter); //Agregado materias
-app.use("/alu", alumnosRouter); //Agregado alumnos
-app.use("/prof", profesoresRouter); //Agregado profesores
-app.use("/ins", inscripcionesRouter); //Agregado inscripciones
+
+//Agregada verificación para las diferentes rutas.
+app.use("/car",verificacion, carrerasRouter);
+app.use("/mat",verificacion, materiasRouter); //Agregado materias
+app.use("/alu",verificacion, alumnosRouter); //Agregado alumnos
+app.use("/prof",verificacion, profesoresRouter); //Agregado profesores
+app.use("/ins",verificacion, inscripcionesRouter); //Agregado inscripciones
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
@@ -116,3 +122,4 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
+
