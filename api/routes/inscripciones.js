@@ -8,7 +8,12 @@ router.get("/", (req, res) => {
   const pagina = Number.parseInt(req.query.pagina);
   const cantidad = Number.parseInt(req.query.cantidad);
 
-  console.log("Pagina número " + pagina + ", Cantidad de inscripciones por página " +  cantidad);
+  console.log(
+    "Pagina número " +
+      pagina +
+      ", Cantidad de inscripciones por página " +
+      cantidad
+  );
   models.inscripciones
     .findAll({
       attributes: ["id", "fecha", "id_alumno", "id_materia"],
@@ -20,6 +25,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", (req, res) => {
+  console.log("Ingreso de inscripcion");
   models.inscripciones
     .create({
       fecha: req.body.fecha,
@@ -50,6 +56,7 @@ const findInscripcion = (id, { onSuccess, onNotFound, onError }) => {
 };
 
 router.get("/:id", (req, res) => {
+  console.log("Busqueda de inscripción por id");
   findInscripcion(req.params.id, {
     onSuccess: (inscripciones) => res.send(inscripciones),
     onNotFound: () => res.sendStatus(404),
@@ -58,6 +65,7 @@ router.get("/:id", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
+  console.log("Actualizacion de inscripcion");
   const onSuccess = (inscripciones) =>
     inscripciones
       .update(
@@ -87,6 +95,7 @@ router.put("/:id", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
+  console.log("Eliminacion de alumno");
   const onSuccess = (inscripciones) =>
     inscripciones
       .destroy()

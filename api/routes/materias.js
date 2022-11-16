@@ -8,7 +8,9 @@ router.get("/", (req, res) => {
   const pagina = Number.parseInt(req.query.pagina);
   const cantidad = Number.parseInt(req.query.cantidad);
 
-  console.log("Pagina número " + pagina + ", Cantidad de materias por página " +  cantidad);
+  console.log(
+    "Pagina número " + pagina + ", Cantidad de materias por página " + cantidad
+  );
   models.materia
     .findAll({
       attributes: ["id", "nombre", "id_carrera", "id_profesor"],
@@ -20,6 +22,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", (req, res) => {
+  console.log("Ingreso de materia");
   models.materia
     .create({ nombre: req.body.nombre, id_carrera: req.body.id_carrera })
     .then((materia) => res.status(201).send({ id: materia.id }))
@@ -53,6 +56,7 @@ const findMateria = (id, { onSuccess, onNotFound, onError }) => {
 };
 
 router.get("/:id", (req, res) => {
+  console.log("Busqueda de materia por id");
   findMateria(req.params.id, {
     onSuccess: (materia) => res.send(materia),
     onNotFound: () => res.sendStatus(404),
@@ -61,6 +65,7 @@ router.get("/:id", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
+  console.log("Actualizacion de materia");
   const onSuccess = (materia) =>
     materia
       .update(
@@ -92,6 +97,7 @@ router.put("/:id", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
+  console.log("Eliminacion de materia");
   const onSuccess = (materia) =>
     materia
       .destroy()

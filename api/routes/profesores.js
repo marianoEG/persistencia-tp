@@ -8,7 +8,12 @@ router.get("/", (req, res) => {
   const pagina = Number.parseInt(req.query.pagina);
   const cantidad = Number.parseInt(req.query.cantidad);
 
-  console.log("Pagina número " + pagina + ", Cantidad de profesores por página " +  cantidad);
+  console.log(
+    "Pagina número " +
+      pagina +
+      ", Cantidad de profesores por página " +
+      cantidad
+  );
   models.profesor
     .findAll({
       attributes: ["id", "nombre", "dni"],
@@ -21,7 +26,7 @@ router.get("/", (req, res) => {
 
 // PROFESORES CON MATERIAS
 router.get("/materias", (req, res) => {
-  console.log("Esto es un mensaje para ver en consola");
+  console.log("Profesores con materias");
   models.profesor
     .findAll({
       attributes: ["id", "nombre", "dni"],
@@ -38,6 +43,7 @@ router.get("/materias", (req, res) => {
 });
 
 router.post("/", (req, res) => {
+  console.log("Ingreso de profesor");
   models.profesor
     .create({ nombre: req.body.nombre, dni: req.body.dni })
     .then((profesor) => res.status(201).send({ id: profesor.id }))
@@ -71,6 +77,7 @@ const findProfesor = (id, { onSuccess, onNotFound, onError }) => {
 };
 
 router.get("/:id", (req, res) => {
+  console.log("Busqueda de profesor por id");
   findProfesor(req.params.id, {
     onSuccess: (profesor) => res.send(profesor),
     onNotFound: () => res.sendStatus(404),
@@ -79,6 +86,7 @@ router.get("/:id", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
+  console.log("Actualizacion de profesor");
   const onSuccess = (profesor) =>
     profesor
       .update(
@@ -106,6 +114,7 @@ router.put("/:id", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
+  console.log("Eliminacion de profesor");
   const onSuccess = (profesor) =>
     profesor
       .destroy()

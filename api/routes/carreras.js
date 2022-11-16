@@ -8,7 +8,9 @@ router.get("/", (req, res) => {
   const pagina = Number.parseInt(req.query.pagina);
   const cantidad = Number.parseInt(req.query.cantidad);
 
-  console.log("Pagina número " + pagina + ", Cantidad de carreras por página " +  cantidad);
+  console.log(
+    "Pagina número " + pagina + ", Cantidad de carreras por página " + cantidad
+  );
   models.carrera
     .findAll({
       attributes: ["id", "nombre"],
@@ -21,6 +23,7 @@ router.get("/", (req, res) => {
 
 // CARRERAS CON MATERIAS
 router.get("/materias", (req, res) => {
+  console.log("Carreras con materias");
   models.carrera
     .findAll({
       include: [
@@ -37,6 +40,7 @@ router.get("/materias", (req, res) => {
 });
 
 router.post("/", (req, res) => {
+  console.log("Ingreso de alumno");
   models.carrera
     .create({ nombre: req.body.nombre })
     .then((carrera) => res.status(201).send({ id: carrera.id }))
@@ -70,6 +74,7 @@ const findCarrera = (id, { onSuccess, onNotFound, onError }) => {
 };
 
 router.get("/:id", (req, res) => {
+  console.log("Busqueda de carrera por id");
   findCarrera(req.params.id, {
     onSuccess: (carrera) => res.send(carrera),
     onNotFound: () => res.sendStatus(404),
@@ -78,6 +83,7 @@ router.get("/:id", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
+  console.log("Actualizacion de carrera");
   const onSuccess = (carrera) =>
     carrera
       .update({ nombre: req.body.nombre }, { fields: ["nombre"] })
@@ -102,6 +108,7 @@ router.put("/:id", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
+  console.log("Eliminacion de carrera");
   const onSuccess = (carrera) =>
     carrera
       .destroy()
